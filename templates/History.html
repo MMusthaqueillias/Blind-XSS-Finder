@@ -1,0 +1,161 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<div class="app-content content" style="padding-top: 50px !important;">
+  <div class="content-wrapper " >
+
+      <div class="content-wrapper-before"></div>
+      <div class="content-header row">
+      </div>
+      <div class="content-body" >
+          <!-- Chart -->
+          <div class="row match-height">
+              <div class="col-12" >
+                  <div class="">
+                  </div>
+              </div>
+          </div>
+          <!-- Chart -->
+          <!-- eCommerce statistic -->
+          <div class="row match-height">
+              <div class="col-xl-12 col-lg-12 col-md-12" style="max-width:100% !important">
+                  <div class="card pull-up ecom-card-1 bg-white" style=" max-width:100% !important ">
+                      <div class="card-content ecom-card2 " style=" max-width:100% !important ">
+
+                          {% csrf_token %}
+                          <h5 class="text-muted danger position-absolute p-1"> History
+                          </h5>
+                          <div>
+                              <i class="ft-pie-chart danger font-large-1 float-right p-1"></i>
+                          </div>
+                          <div style="padding-top: 50px !important;" class="progress-stats-container ct-golden-section  position-relative pt-3  ">
+                            <div class="condainer accordion accordion-flush history" id="accordionFlushExample">
+
+              
+         
+                            </div>
+
+
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            
+
+
+          </div>
+          <!--/ eCommerce statistic -->
+
+          <!-- Statistics -->
+
+          <!--/ Statistics -->
+      </div>
+  </div>
+</div>
+         
+              
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+       
+    <script>
+      function escapeHtml(unsafe) {
+    return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+      $(document).ready(function () {
+          // Make an AJAX request to the Django view to get the list of files and their content
+          $.ajax({
+              url: '/get_file_list', // Replace with the URL of your Django view that returns the list of files and their content
+              type: 'GET',
+              dataType: 'json',
+              success: function (data) {
+                  // Assuming the server returns a JSON object with 'files' key
+                  var files = data.files;
+  
+                  // Loop through the files and create an accordion item for each file
+                  var accordion = $("#accordionFlushExample");
+                  $.each(files, function (index, fileData) {
+                      // Create accordion item
+                      var accordionItem = $("<div>").addClass("accordion-item");
+  
+                      // Create accordion header
+                      var accordionHeader = $("<h2>").addClass("accordion-header").attr("id", "flush-heading-" + index);
+                      var accordionButton = $("<button>").addClass("accordion-button collapsed").attr({
+                          "type": "button",
+                          "data-bs-toggle": "collapse",
+                          "data-bs-target": "#flush-collapse-" + index,
+                          "aria-expanded": "false",
+                          "aria-controls": "flush-collapse-" + index
+                      }).text(fileData.filename);
+  
+                      accordionHeader.append(accordionButton);
+                      accordionItem.append(accordionHeader);
+  
+                      // Create accordion body
+                      var accordionBody = $("<div>").addClass("accordion-collapse collapse").attr({
+                          "id": "flush-collapse-" + index,
+                          "aria-labelledby": "flush-heading-" + index,
+                          "data-bs-parent": "#accordionFlushExample"
+                      });
+  
+                      // Create a list to display the scan settings
+                      var scanSettingsList = $("<ul>");
+                      $.each(fileData.content.scan_setting, function (key, value) {
+                          var listItem = $("<li>").text(key + ": " + value);
+                          scanSettingsList.append(listItem);
+                      });
+                      accordionBody.append($("<h4>").text("Scan Settings:"));
+                      accordionBody.append(scanSettingsList);
+  
+                      // Divide the results into two sections: robot.txt and scan
+                      var robotResults = [];
+                      var scanResults = [];
+                      $.each(fileData.content.result, function (index, resultItem) {
+                         
+                              scanResults.push(resultItem);
+                     
+                      });
+  
+                      // Create a list to display robot.txt results
+                      var robotResultList = $("<ul>");
+                      $.each(robotResults, function (index, robotResultItem) {
+                          // var listItem = $("<li>");
+                          // var resultDetailsList = $("<ul>");
+                            robotResultList.append($("<li>").text("found: " + robotResultItem.found));
+                              robotResultList.append($("<li>").text("content: " + robotResultItem.content));
+                          // listItem.append(resultDetailsList);
+                          // robotResultList.append(listItem);
+                      });
+                      // accordionBody.append($("<h4>").text("robot.txt:"));
+                      accordionBody.append(robotResultList);
+  
+                      // Create a list to display scan results
+                      var scanResultList = $("<ul>");
+                      $.each(scanResults, function (index, scanResultItem) {
+                          // var listItem = $("<li>");
+                          // var resultDetailsList = $("<ul>");
+                            if(scanResultItem.response==200){
+                            scanResultList.append($("<li>").html('<a style="color:green" href="'+scanResultItem.link+'">'+scanResultItem.link+'</a> -----> '+escapeHtml(scanResultItem.payload)));
+                            }else{
+                              scanResultList.append($("<li>").html('<a style="color:orange" href="'+scanResultItem.link+'">'+scanResultItem.link+'</a> -----> '+escapeHtml(scanResultItem.payload)));
+                            }
+                          // listItem.append(resultDetailsList);
+                          // scanResultList.append(resultDetailsList);
+                      });
+                      accordionBody.append($("<h4>").text("scan:"));
+                      accordionBody.append(scanResultList);
+  
+                      accordionItem.append(accordionBody);
+  
+                      // Append the accordion item to the accordion
+                      accordion.append(accordionItem);
+                  });
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                  console.log('Error: ' + textStatus);
+              }
+          });
+      });
+  </script>
+  
+  
+  
+  

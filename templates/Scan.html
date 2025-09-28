@@ -1,0 +1,95 @@
+
+
+
+
+<div class="app-content content">
+  <div class="content-wrapper">
+      <div class="content-wrapper-before"></div>
+      <div class="content-header row">
+      </div>
+      <div class="content-body">
+          <!-- Chart -->
+          <div class="row match-height">
+              <div class="col-12">
+                  <div class="">
+                  </div>
+              </div>
+          </div>
+          <!-- Chart -->
+          <!-- eCommerce statistic -->
+          <div class="row match-height">
+              <div class="col-xl-6 col-lg-6 col-md-12" style="max-width:100% !important">
+                  <div class="card pull-up ecom-card-1 bg-white" style=" max-width:100% !important ">
+                      <div class="card-content ecom-card2 " style=" max-width:100% !important ">
+
+                          {% csrf_token %}
+                          <h5 class="text-muted danger position-absolute p-1"> Scan
+                          </h5>
+                          <div>
+                              <i class="ft-pie-chart danger font-large-1 float-right p-1"></i>
+                          </div>
+                          <div style=" max-width:100% !important " class="progress-stats-container ct-golden-section  position-relative pt-3  ">
+                              <div style=" max-width:100% !important " class="card-body">
+                                  <p>Scan Name</p>
+                                  <fieldset class="form-group">
+                                      <input type="text" class="form-control scan_name" id="readonlyInput" placeholder="example">
+                                  </fieldset>
+
+                                  <p> URL file</p>
+                                  <fieldset class="form-group">
+                                      <input type="text" class="form-control url_file" id="readonlyInput" placeholder="/url.txt">
+                                  </fieldset>
+
+                                  <p>Custom Payload</p>
+                                  <fieldset class="form-group">
+                                      <input type="text" class="form-control custom_payload" id="readonlyInput" placeholder="/Payload.txt">
+                                  </fieldset>
+                                  <div class="container">
+                                    <div class="progress stoped">
+                                        <div class="progress-bar progress-bar-striped bg-warning " role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="progress  running" style="display:none">
+                                        <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                  <fieldset class="form-group">
+                                  <button onclick="scan()" type="button" class="start_scan btn btn-primary btn-min-width mr-1 mb-1">Scan</button>
+                                </fieldset>
+                              </div>
+
+
+
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12" style="max-width:100% !important">
+                  <div class="card pull-up ecom-card-1 bg-white">
+                      <div class="card-content ecom-card2">
+                          <h5 class="text-muted danger position-absolute p-1">Scan Progress</h5>
+                          <div>
+                              <i class="ft-pie-chart danger font-large-1 float-right p-1"></i>
+                          </div>
+                          <div class="container progress-stats-container ct-golden-section height-75 position-relative pt-3  ">
+                         
+                              <div class="result">
+
+          
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+
+          </div>
+          <!--/ eCommerce statistic -->
+
+          <!-- Statistics -->
+
+          <!--/ Statistics -->
+      </div>
+  </div>
+</div>

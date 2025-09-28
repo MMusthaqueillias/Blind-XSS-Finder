@@ -1,0 +1,1 @@
+celery -A Project worker -l info

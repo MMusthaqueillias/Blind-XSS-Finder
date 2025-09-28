@@ -1,0 +1,20 @@
+{% extends 'Main.html' %} {% block Main %} {% load static %}
+
+
+ {% include 'topbar.html'%}{% include 'sidebar.html'%}
+
+ {% if page == 'Scan' %}
+ {% include 'Scan.html' %}
+ {% elif page == 'History' %}
+ {% include 'History.html' %}
+
+ {% else %}
+ <p>Page not found. {{ page|safe }}</p>
+{% endif %}
+  
+
+  
+
+  {% include 'footer.html'%}
+
+  {% endblock Main %}
